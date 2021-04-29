@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'timer.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(timer());
 }
 
 class MyApp extends StatelessWidget {
@@ -12,19 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
+        primarySwatch: Colors.yellow,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MyHomePage(title: 'ToDo app'),
@@ -34,7 +23,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   final String title;
-
 
   MyHomePage({Key key, this.title}) : super(key: key);
 
@@ -70,23 +58,18 @@ class _MyHomePage extends State<MyHomePage> {
               actions: <Widget>[
                 new FlatButton(
                     child: new Text('CANCEL'),
-                    onPressed: () => Navigator.of(context).pop()
-                ),
+                    onPressed: () => Navigator.of(context).pop()),
                 new FlatButton(
                     child: new Text('MARK AS DONE'),
                     onPressed: () {
                       _removeTodoItem(index);
                       Navigator.of(context).pop();
-                    }
-                )
-              ]
-          );
-        }
-    );
+                    })
+              ]);
+        });
   }
 
-  Widget note(String text, int index){
-
+  Widget note(String text, int index) {
     return Padding(
         padding: EdgeInsets.all(10),
         child: Container(
@@ -108,7 +91,7 @@ class _MyHomePage extends State<MyHomePage> {
                   children: [
                     Padding(
                         padding:
-                        EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                         child: Icon(
                           Icons.alarm,
                           color: Colors.green,
@@ -121,7 +104,6 @@ class _MyHomePage extends State<MyHomePage> {
                         ))
                   ],
                 ))));
-
   }
 
   void _pushAddTodoScreen() {
@@ -153,12 +135,7 @@ class _MyHomePage extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -176,9 +153,8 @@ class _MyHomePage extends State<MyHomePage> {
           int index,
         ) {
           return note(
-             notes[index],
+            notes[index],
             index,
-
           );
         },
       ),
@@ -189,7 +165,6 @@ class _MyHomePage extends State<MyHomePage> {
     );
   }
 }
-
 
 /*class note extends StatelessWidget {
   final String text;
