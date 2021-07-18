@@ -1,9 +1,16 @@
+import 'dart:convert';
+import 'storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:async';
+import 'dart:io';
 import 'timer.dart';
+import 'note.dart';
+
 
 void main() {
-  runApp(timer());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -16,15 +23,16 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.yellow,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'ToDo app'),
+      home: MyHomePage(title: 'ToDo app', notesStorage: NotesStorage(),),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   final String title;
+  final NotesStorage notesStorage ;
 
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key key, this.title, this.notesStorage}) : super(key: key);
 
   @override
   _MyHomePage createState() => _MyHomePage();
@@ -33,20 +41,40 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePage extends State<MyHomePage> {
   var notes = List<String>();
 
+
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
+
+    super.initState();  
+    widget.notesStorage.readToNotesFile().then((String value) {
+      setState(() {
+              notes.add(value);
+            });
+    });
+
   }
 
-  void addNoteT(String cat) {
+  void addNoteT(String text) {
     setState(() {
-      notes.add(cat);
+      notes.add(text);
+      Note saveNote = Note(textNote: notes[0]);
+      widget.notesStorage.writeToNotesfile(saveToJson: saveNote.toJson());
+      /*
+      Note saveNote =Note(textNote: notes[0] );
+      writeNotes( saveJsonNotes: saveNote.toJson());
+*/
+      
     });
   }
 
   void _removeTodoItem(int index) {
-    setState(() => notes.removeAt(index));
+    setState(() { 
+      notes.removeAt(index);
+      Note saveNote = Note(textNote: notes[0]);
+      widget.notesStorage.writeToNotesfile(saveToJson: saveNote.toJson());
+ 
+    });
   }
 
   void _promptRemoveTodoItem(int index) {
@@ -132,6 +160,8 @@ class _MyHomePage extends State<MyHomePage> {
       ),
     );
   }
+
+ 
 
   @override
   Widget build(BuildContext context) {

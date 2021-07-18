@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class timer extends StatelessWidget {
   @override
@@ -18,7 +19,7 @@ class timer extends StatelessWidget {
 
 class timerPage extends StatefulWidget {
   double progressingTime = 0.6;
-  
+ 
   timerPage({
     Key key,
   }) : super(key: key);
@@ -28,6 +29,7 @@ class timerPage extends StatefulWidget {
 
 class _timerPageState extends State<timerPage> {
   CountDownController control = new CountDownController();
+  double counterValue = 11;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,42 +37,27 @@ class _timerPageState extends State<timerPage> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Center(
-          child: Text("its me timer"),
+          child: Text(
+            "its me timer",
+            style: TextStyle(color: Colors.white),
+          ),
         ),
       ),
       body: Center(
-          child: CircularCountDownTimer(
-        duration: 10,
-        initialDuration: 0,
-        controller: control,
-        width: MediaQuery.of(context).size.width / 2,
-        height: MediaQuery.of(context).size.height / 2,
-        ringColor: Colors.grey[300],
-        ringGradient: null,
-        fillColor: Colors.purpleAccent[100],
-        fillGradient: null,
-        backgroundColor: Colors.transparent,
-        backgroundGradient: null,
-        strokeWidth: 20.0,
-        strokeCap: StrokeCap.round,
-        textStyle: TextStyle(
-            fontSize: 33.0, color: Colors.blue, fontWeight: FontWeight.bold),
-        textFormat: CountdownTextFormat.S,
-        isReverse: false,
-        isReverseAnimation: false,
-        isTimerTextShown: true,
-        autoStart: true,
-        onStart: () {
-          print('Countdown Started');
-        },
-        onComplete: () {
-          print('Countdown Ended');
-        },
-      )),
+        child: Center(
+          child: CircularPercentIndicator(
+              radius: 150,
+              circularStrokeCap: CircularStrokeCap.round,
+              lineWidth: 20.0,
+              percent: 0.3,
+              center: new Text("100%"),
+              progressColor: Colors.green),
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          control.pause();
-          control.restart();
+        onPressed: () {
+        Stopwatch().start();  
+          
         },
         child: Icon(Icons.add),
       ),
