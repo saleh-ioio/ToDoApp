@@ -8,7 +8,6 @@ import 'dart:io';
 import 'timer.dart';
 import 'note.dart';
 
-
 void main() {
   runApp(MyApp());
 }
@@ -23,14 +22,17 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.yellow,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'ToDo app', notesStorage: NotesStorage(),),
+      home: MyHomePage(
+        title: 'ToDo app',
+        notesStorage: NotesStorage(),
+      ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   final String title;
-  final NotesStorage notesStorage ;
+  final NotesStorage notesStorage;
 
   MyHomePage({Key key, this.title, this.notesStorage}) : super(key: key);
 
@@ -41,39 +43,55 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePage extends State<MyHomePage> {
   var notes = List<String>();
 
-
   @override
   void initState() {
     // TODO: implement initState
 
-    super.initState();  
-    widget.notesStorage.readToNotesFile().then((String value) {
+    super.initState();
+    widget.notesStorage.readToNotesFile().then((value) {
       setState(() {
-              notes.add(value);
-            });
+        value.NoteList.forEach((element) {
+          notes.add(element.textNote);
+        });
+        //notes.add(value);
+      });
     });
-
   }
 
   void addNoteT(String text) {
     setState(() {
       notes.add(text);
-      Note saveNote = Note(textNote: notes[0]);
-      widget.notesStorage.writeToNotesfile(saveToJson: saveNote.toJson());
-      /*
-      Note saveNote =Note(textNote: notes[0] );
-      writeNotes( saveJsonNotes: saveNote.toJson());
-*/
-      
+
+      List<Note> ListNotesObj = new List<Note>();
+      notes.forEach((i) {
+        ListNotesObj.add(
+          new Note(textNote: i),
+        );
+      });
+      NotesList saveNotes = new NotesList(NoteList: ListNotesObj);
+
+      widget.notesStorage.writeToNotesfile(saveToJson: saveNotes);
+      widget.notesStorage.readToNotesFile();
     });
   }
 
   void _removeTodoItem(int index) {
-    setState(() { 
+    setState(() {
       notes.removeAt(index);
-      Note saveNote = Note(textNote: notes[0]);
-      widget.notesStorage.writeToNotesfile(saveToJson: saveNote.toJson());
- 
+
+      List<Note> ListNotesObj = new List<Note>();
+      notes.forEach((i) {
+        ListNotesObj.add(
+          new Note(textNote: i),
+        );
+      });
+      NotesList saveNotes = new NotesList(NoteList: ListNotesObj);
+
+      widget.notesStorage.writeToNotesfile(saveToJson: saveNotes);
+      widget.notesStorage.readToNotesFile();
+
+      /*Note saveNote = Note(textNote: notes[0]);
+      widget.notesStorage.writeToNotesfile(saveToJson: saveNote.toJson());*/
     });
   }
 
@@ -161,11 +179,8 @@ class _MyHomePage extends State<MyHomePage> {
     );
   }
 
- 
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -195,5 +210,3 @@ class _MyHomePage extends State<MyHomePage> {
     );
   }
 }
-
-
